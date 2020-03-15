@@ -1,6 +1,12 @@
 package com.zhangbo.log.log4j.shujjiegou;
 
 import javax.sound.midi.Soundbank;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
 
 /**
  * @author zhangbo
@@ -43,13 +49,72 @@ public class spareArray {
                 }
             }
         }
-        for (int i = 0; i < xishu.length; i++) {
-            for (int j=0;j<3;j++){
-                System.out.printf("%d\t",xishu[i][j]);
-            }
-            System.out.println();
-
+        try {
+            array2File(xishu,"/Users/zhangbo/E-disk/shell/struck.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        try {
+            int[][] ints = sparseArrayFromIo();
+            for (int i = 0; i < ints.length; i++) {
 
+
+                    System.out.printf("%d\t%d\t%d\t",ints[i][0],ints[i][1],ints[i][2]);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    /**
+     * 写入磁盘操作
+     * @param array
+     * @param path
+     * @throws IOException
+     */
+    public static void array2File(int array[][],String path) throws IOException {
+        File file = new File(path);
+        if (!file.exists())
+            file.createNewFile();
+        FileWriter writer = new FileWriter(file);
+        for (int row = 0; row < array.length; row++) {
+            for (int j=0;j<3;j++) {
+                writer.write(array[row][j]);
+            }
+        }
+        writer.flush();
+        writer.close();
+    }
+
+    /**
+     * 将稀疏数组从磁盘读入到内存
+     * @return
+     * @throws Exception
+     */
+    public static int[][] sparseArrayFromIo( ) throws Exception {
+
+        FileReader reader = new FileReader("/Users/zhangbo/E-disk/shell/struck.txt");
+        Map<Integer,Integer> map = new HashMap();
+        int count=0;
+        int data = 0;
+        while ((data=reader.read())!=-1){
+            map.put(count,data);
+            count++;
+        }
+        if (map.size() == 0){
+            return null;
+        }
+        int[][] sparseArray = new int[map.size()/3][3];
+        int index =0;
+        for(int i = 0;i < map.size()/3;i++) {
+            for (int j = 0; j < 3; j++) {
+                sparseArray[i][j] = map.get(index);
+                index ++;
+            }
+        }
+        map.clear();
+        return sparseArray;
+    }
+
 }
