@@ -56,15 +56,29 @@ public class spareArray {
         }
         try {
             int[][] ints = sparseArrayFromIo();
-            for (int i = 0; i < ints.length; i++) {
-
-
-                    System.out.printf("%d\t%d\t%d\t",ints[i][0],ints[i][1],ints[i][2]);
-
-            }
+//            for (int i = 0; i < ints.length; i++) {
+//
+//
+//                    System.out.printf("%d\t%d\t%d\t",ints[i][0],ints[i][1],ints[i][2]);
+//
+//            }
+            reFlashArray(ints);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 将稀疏数组回复为原数组
+     * @param spareArray
+     */
+    public static void reFlashArray(int spareArray[][]){
+        int arr [] [] = new int[spareArray[0][0]][spareArray[0][1]];
+        for (int i = 1; i < spareArray.length; i++) {
+                arr [spareArray[i][0]][spareArray[i][1]] = spareArray[i][2];
+        }
+
+        int c =0;
     }
 
     /**
